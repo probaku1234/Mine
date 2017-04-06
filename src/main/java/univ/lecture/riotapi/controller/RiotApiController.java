@@ -25,28 +25,6 @@ public class RiotApiController {
     @Value("${riot.api.key}")
     private String riotApiKey;
 
-    /*
-    @RequestMapping(value = "/summoner/{name}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public Summoner querySummoner(@PathVariable("name") String summonerName) throws UnsupportedEncodingException {
-        final String url = riotApiEndpoint + "/summoner/by-name/" +
-                summonerName +
-                "?api_key=" +
-                riotApiKey;
-
-        String response = restTemplate.getForObject(url, String.class);
-        Map<String, Object> parsedMap = new JacksonJsonParser().parseMap(response);
-
-        parsedMap.forEach((key, value) -> log.info(String.format("key [%s] type [%s] value [%s]", key, value.getClass(), value)));
-
-        Map<String, Object> summonerDetail = (Map<String, Object>) parsedMap.values().toArray()[0];
-        String queriedName = (String)summonerDetail.get("name");
-        int queriedLevel = (Integer)summonerDetail.get("summonerLevel");
-        Summoner summoner = new Summoner(queriedName, queriedLevel);
-
-        return summoner;
-    }
-    */
-
     @RequestMapping(value = "/calc" , method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Answer calc(@RequestParam(value = "expression") String expression) {
         double result;
