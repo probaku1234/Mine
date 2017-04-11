@@ -39,7 +39,7 @@ public class RiotApiController {
         Answer answer = new Answer(12, currentTime,result);
 
         try {
-            URL url = new URL("https://demo2446904.mockable.io/api/v1/answer");
+            URL url = new URL("http://52.79.162.52:8080/api/v1/answer");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
 
             con.setDoOutput(true);
