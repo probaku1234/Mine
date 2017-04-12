@@ -32,60 +32,19 @@ public class RiotApiController {
 
     @RequestMapping(value = "/calc" , method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public Answer calc(@RequestParam(value = "expression") String expression) {
+        final String url = riotApiEndpoint;
         double result;
         long currentTime = System.currentTimeMillis();
         CalcApp app = new CalcApp(expression);
         result = app.calc3();
         Answer answer = new Answer(12, currentTime,result);
 
-        try {
-            URL url = new URL("http://52.79.162.52:8080/api/v1/answer");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-
-            con.setDoOutput(true);
-            con.setDoInput(true);
-            con.setRequestProperty("Content-Type", "application/json");
-            con.setRequestProperty("Accept", "*/*");
-            con.setRequestProperty("X-Requested-With", "XMLHttpRequest");
-
-            JSONObject data = new JSONObject();
-            data.put("teamId",answer.getTeamId());
-            data.put("now", answer.getNow());
-            data.put("result", answer.getResult());
-
-            OutputStreamWriter wr= new OutputStreamWriter(con.getOutputStream());
-
-            wr.write(data.toString());
-            wr.flush();
-
-            StringBuilder sb = new StringBuilder();
-
-            int HttpResult =con.getResponseCode();
-
-            if(HttpResult ==HttpURLConnection.HTTP_OK ){
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(),"utf-8"));
-
-                String line = null;
-
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-
-                br.close();
-
-                System.out.println(""+sb.toString());
-
-            }else{
-                System.out.println(con.getResponseMessage());
-            }
-        } catch (MalformedURLException e) {
-            System.out.println("The URL address is incorrect.");
-            e.printStackTrace();
-        } catch (IOException e) {
-            System.out.println("It can't connect to the web page.");
-            e.printStackTrace();
-        }
+        JSONObject data = new JSONObject();
+        data.put("teamId",answer.getTeamId());
+        data.put("now", answer.getNow());
+        data.put("result", answer.getResult());
+        String response = restTemplate.postForObject(url,data,String.class);
+        System.out.println(response);
         return answer;
     }
 }
